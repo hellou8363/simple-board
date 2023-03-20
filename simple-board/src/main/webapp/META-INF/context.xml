@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+
+	<Resource
+		name="jdbc/OracleLocalDB"
+		auth="Container"
+		type="javax.sql.DataSource"
+		username="C##H3"
+		password="oracle"
+		driverClassName="oracle.jdbc.OracleDriver"
+		url="jdbc:oracle:thin:@192.168.55.146:1521/xepdb1"
+		maxTotal="8"
+		maxIdle="2"
+	/>
+
+</Context>

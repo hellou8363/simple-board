@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 모든 XML파일은 반드시 XML 선언부가 있어야 함 -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.zerok</groupId>
+	<artifactId>servletjsp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<!-- WAS가 war 파일을 받아야 자동으로 압축해제 후 웹 애플리케이션으로 자동등록 해줌 -->
+	<packaging>war</packaging>
+
+	<name>servletjsp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<java-version>11</java-version>
+		<!-- ${}로 시스템 환경변수에 있는 JAVA_HOME 환경변수의 값을 속성 태그의 값으로 넣을 수 있음  -->
+		<java-home>${env.JAVA_HOME}</java-home>
+
+		<!-- log 라이브러리 버전 설정(log4j, slf4j 버전이 동일하도록)  -->
+		<org.slf4j-version>2.19.0</org.slf4j-version>
+	</properties>
+
+	<!-- 의존성 라이브러리 설정 -->
+	<dependencies>
+
+		<!-- lombok @Log4j2 어노테이션이 사용하는 로그라이브러리 의존성 설정 -->
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+
+		<!-- Driver SPY, Spring, HikariCP 등의 다른 라이브러리가 사용하는 slf4j 라는 
+		로그 라이브러리와 log4j와 바인딩(연계)시키는 라이브러리 
+		(lombok은 log4j2, Driver SPY나 Spring Framwork는 log4j2를 직접 사용하지 않고
+		껍데기인 slf4를 사용하도록 되어있음, log4j와 버전이 일치해야 함)
+		-->
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+
+		<!-- Servlet 개발을 위해 필요한, 자바확장표준 API가 들어있는 라이브러리 설정 -->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<!-- scope: provided, 패키징에 포함되지 않음 -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- JSP 개발을 위해 필요한, 자바확장표준 API가 들어있는 라이브러리 설정 -->
+		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.3.3</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- 
+		JSP 개발을 위해 필요한, JSTL(Java Server Page Tag Library) 라이브러리 설정
+		JSTL은 JSP의 하위 기술 중 하나로 JSP 밑에 넣음 
+		-->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<!-- JUnit Test Framework 라이브러리 설정 -->
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		<!-- 
+		scope: test, test 수행 시에만 class path에 설정되고 테스트가 끝나면 자동으로 제외되며
+		배포파일인 war 파일을 만들 때도 포함되지 않음 
+		-->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.9.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- lombok 라이브러리 설정 -->
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.26</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Driver SPY 라이브러리 설정 -->
+		<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1 -->
+		<dependency>
+			<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+			<version>1.16</version>
+		</dependency>
+
+		<!-- 
+		Oracle JDBC Driver 라이브러리 설정 
+		전체를 사용하지 않고 제외 시켜야 할 항목들이 있음 
+		(simplefan, ons, rsi, ucp, xdb, xmlparserv2 제외)
+		-->
+		<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc8-production -->
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8-production</artifactId>
+			<version>21.9.0.0</version>
+			<type>pom</type>
+
+			<exclusions>
+				<exclusion>
+					<groupId>com.oracle.database.ha</groupId>
+					<artifactId>simplefan</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>com.oracle.database.ha</groupId>
+					<artifactId>ons</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>com.oracle.database.jdbc</groupId>
+					<artifactId>rsi</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>com.oracle.database.jdbc</groupId>
+					<artifactId>ucp</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>com.oracle.database.xml</groupId>
+					<artifactId>xdb</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>com.oracle.database.xml</groupId>
+					<artifactId>xmlparserv2</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+	</dependencies>
+
+
+	<build>
+
+		<!-- 웹어플리케이션의 Context Path(Root)를 "/" (Root Web Application 으로 설정) -->
+		<finalName>/</finalName>
+		<plugins>
+
+			<!-- 패키징 단계를 수행할 때 이 플러그인으로 war 파일로 패키징 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.2</version>
+			</plugin>
+
+			<!-- 이클립스에 있는 Maven을 전체적으로 관리해주는 플러그인 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.10</version>
+
+				<!-- 
+				Maven이 작동시 위에 있는 dependency 태그에 설정한대로 
+				dependency library jar 파일을 다운로드 할 때 
+				소스까지 다운로드 인지, 문서까지 다운로드인지 설정 
+				-->
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<!-- Maven이 컴파일 or 빌드를 수행할 때 자바 컴파일러를 호출하도록 하는 플러그인 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+
+				<!-- 호출할 컴파일러 버전 설정(상단 properties에 지정한대로 설정) -->
+				<configuration>
+					<release>${java-version}</release>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+</project>

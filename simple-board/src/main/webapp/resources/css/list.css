@@ -1,0 +1,79 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	width: 80%;
+	margin: auto;
+	text-align: center;
+	position: relative;
+}
+
+.container>h1 {
+	margin: 50px 0;
+}
+
+.container>table {
+	width: 100%;
+	margin: auto;
+	border-spacing: 0;
+}
+
+.container form {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+thead tr th {
+	height: 40px;
+	border-top: 2px solid gray;
+	border-bottom: 1px solid lightgray;
+}
+
+thead tr th:nth-of-type(1) {
+	width: 10%;
+}
+
+thead tr th:nth-of-type(1), thead tr th:nth-of-type(3), thead tr th:nth-of-type(4),
+	thead tr th:nth-of-type(5) {
+	width: 10%;
+	white-space: nowrap;
+}
+
+thead tr th:nth-of-type(2) { /* 제목 */
+	width: 90%;
+}
+
+tbody td {
+	padding: 8px 20px;
+	border-bottom: 1px solid lightgray;
+}
+
+table ~ a {
+	border: 1px solid gray;
+	padding: 5px 10px;
+	margin: 20px 0;
+	border-radius: 10px;
+	background-color: rgb(226, 226, 226);
+	text-decoration: none;
+	position: absolute;
+	right: 0;
+}
+
+.page {
+	padding: 20px 0;
+	text-align: left;
+}
+.page > a[href='#'] {
+	color: red;
+	text-weght: bold;
+}
+
+a:link, a:visited, a:active, a:hover {
+	color: #000;
+}
+
+.container form p {
+	margin: 0;
+}
